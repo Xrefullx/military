@@ -12,11 +12,14 @@ func Router(cfg models.Config) *gin.Engine {
 	}
 	r := gin.New()
 	r.Use(gin.Logger())
-	r.Use(middleware.JwtValid())
 
 	gUser := r.Group("/api")
 	{
-		gUser.POST("/login", Login)
+		r.POST("/api/auth", Auth)
+		gUser.Use(middleware.JwtValid())
+		{
+			gUser.POST("/login", Login)
+		}
 
 	}
 	return r

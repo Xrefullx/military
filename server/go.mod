@@ -3,6 +3,9 @@ module github.com/Xrefullx/military
 go 1.21.0
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
+	github.com/gin-gonic/gin v1.9.1
 	github.com/joho/godotenv v1.5.1
 	go.uber.org/zap v1.26.0
 )
@@ -12,11 +15,9 @@ require (
 	github.com/caarlos0/env v3.5.0+incompatible // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.0 // indirect
-	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/gin-contrib/cors v1.5.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.9.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.15.5 // indirect
