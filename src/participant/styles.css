@@ -1,0 +1,98 @@
+/* styles.css */
+.table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-container p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.table {
+    border-collapse: collapse;
+    margin: 10px;
+    width: 100%;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.table th:first-child,
+.table td:first-child {
+    border-left: 2px solid #ddd;
+}
+
+.table th:last-child,
+.table td:last-child {
+    border-right: 2px solid #ddd;
+}
+
+/* styles.css */
+.input-cell input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin: 4px 0;
+    transition: border-color 0.3s ease-in-out; /* Анимация цвета границы при фокусе */
+}
+
+.input-cell input:focus {
+    outline: none; /* Убираем стандартное подчеркивание при фокусе */
+    border-color: #4caf50; /* Цвет границы при фокусе */
+}
+
+/* Добавим стиль для всей строки, чтобы убрать границы для пустой ячейки */
+.input-cell:first-child input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-cell:last-child input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+.submit-button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.centered-tables {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-container {
+    margin-top: 100px;
+}
+
+.table-container:last-child .table {
+    width: 100%; /* Set the width of the second table to 100% */
+}
+
+.input-cell {
+    position: relative;
+}
+
+.delete-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 8px; /* Adjust this value for spacing */
+}
+

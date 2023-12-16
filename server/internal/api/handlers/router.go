@@ -13,8 +13,11 @@ func Router(cfg models.Config) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 
+	r.Use(middleware.SetupCorsMiddleware())
+
 	gUser := r.Group("/api")
 	{
+
 		r.POST("/api/auth", Auth)
 		gUser.Use(middleware.JwtValid())
 		{
