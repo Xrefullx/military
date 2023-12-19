@@ -1,19 +1,19 @@
 import React from 'react';
 
-const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,setTableData,removeRow,addRow }) => {
+const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubmit,setTableData,removeRow,addRow }) => {
     return (
         <div className="table-container">
-            <p>4. Военнослужащие воинской части</p>
+            <p>5. Данные о личном составе, находящемся в командировках за пределами ППД, караулах и командах по сопровождению воинских грузов: </p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>
                     <tr>
                         <th>Подразделение (организация)</th>
                         <th>ФИО (старший)</th>
-                        <th>Вид практики</th>
+                        <th>Цель командировки, основание</th>
                         <th>Сроки, место проведения</th>
                         <th>Кол-во л/с</th>
-                        <th>Доп. информация</th>
+                        <th>Доп. информация(убытие, возвращение, место проживания)</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,7 +23,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                                 <input
                                     type="text"
                                     name="event"
-                                    value={rowData.DivisionOrganization}
+                                    value={rowData.DivisionOrganizationTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
                             </td>
@@ -31,7 +31,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                                 <input
                                     type="text"
                                     name="eventDates"
-                                    value={rowData.FIOStarshy}
+                                    value={rowData.FIOStarshyTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
                             </td>
@@ -39,7 +39,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                                 <input
                                     type="text"
                                     name="eventDetails"
-                                    value={rowData.TypeOfPractice}
+                                    value={rowData.ThePurposeOfTheBusinessTripTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
                             </td>
@@ -47,7 +47,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                                 <input
                                     type="text"
                                     name="personnelCount"
-                                    value={rowData.DatesAndVenue}
+                                    value={rowData.DatesAndVenueTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
                             </td>
@@ -55,7 +55,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                                 <input
                                     type="text"
                                     name="personnelCount"
-                                    value={rowData.QuantityOfLs4}
+                                    value={rowData.QuantityOfLsTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
                             </td>
@@ -63,7 +63,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                                 <input
                                     type="text"
                                     name="personnelCount"
-                                    value={rowData.AdditionalInformation}
+                                    value={rowData.AdditionalInformationTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
                             </td>
@@ -86,4 +86,4 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
     );
 };
 
-export default InternshipsTableComponent;
+export default DataOnPersonnelOnBusinessTrips;

@@ -1,36 +1,32 @@
 import React from 'react';
 
 
-const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
+const CadetsOfTheBranch = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
+
     return (
         <div className="table-container">
-            <p>2. Основные мероприятия, запланированные на текущие сутки:</p>
+            <p>Военнослужащие филиала, находящиеся на стационарном лечении в медицинских учреждениях вне:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>
                     <tr>
-                        <th>Мероприятие</th>
-                        <th>Сроки</th>
-                        <th>Должность, звание, Ф.И.О., мероприятие</th>
-                        <th>Кол-во л/с</th>
+                        <th>№ п/п</th>
+                        <th>В/звание, подразделение</th>
+                        <th>Фамилия, имя, отчество</th>
+                        <th>Обстоятельства</th>
                     </tr>
                     </thead>
                     <tbody>
                     {tableData.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
-                                <input
-                                    type="text"
-                                    name="event"
-                                    value={rowData.event}
-                                    onChange={(e) => handleRowChange(e, index, setTableData)}
-                                />
+                                {index + 1}
                             </td>
                             <td className="input-cell">
                                 <input
                                     type="text"
                                     name="eventDates"
-                                    value={rowData.eventDates}
+                                    value={rowData.MilitaryRank}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -38,7 +34,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="eventDetails"
-                                    value={rowData.eventDetails}
+                                    value={rowData.PeopleName}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -46,7 +42,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="personnelCount"
-                                    value={rowData.personnelCount}
+                                    value={rowData.Circumstances}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -73,4 +69,4 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
     );
 };
 
-export default TableComponent;
+export default CadetsOfTheBranch;

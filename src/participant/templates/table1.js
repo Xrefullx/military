@@ -8,7 +8,7 @@ const LeadershipTableComponent = ({ formData, handleChange, handleSubmit }) => {
                 <table className="table">
                     <thead>
                     <tr>
-                        <th colSpan="2">ФВА РВСН</th>
+                        <th colSpan="2">В/Ч №</th>
                         <th>Начальник</th>
                         <th>Зам. начальника</th>
                         <th>Зам. начальника по УНР</th>

@@ -1,18 +1,19 @@
 import React from 'react';
 
-
-const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
+const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
     return (
         <div className="table-container">
-            <p>2. Основные мероприятия, запланированные на текущие сутки:</p>
+            <p>12. Прибывшие в воинскую часть</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>
                     <tr>
-                        <th>Мероприятие</th>
+                        <th>Подразделение (организация)</th>
+                        <th>Количество л/с</th>
+                        <th>Цель прибытия</th>
                         <th>Сроки</th>
-                        <th>Должность, звание, Ф.И.О., мероприятие</th>
                         <th>Кол-во л/с</th>
+                        <th>Примечание</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -22,7 +23,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="event"
-                                    value={rowData.event}
+                                    value={rowData.Division}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -30,7 +31,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="eventDates"
-                                    value={rowData.eventDates}
+                                    value={rowData.FIO}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -38,7 +39,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="eventDetails"
-                                    value={rowData.eventDetails}
+                                    value={rowData.PurposeOfArrival}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -46,7 +47,23 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="personnelCount"
-                                    value={rowData.personnelCount}
+                                    value={rowData.Deadlines}
+                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                />
+                            </td>
+                            <td className="input-cell">
+                                <input
+                                    type="text"
+                                    name="personnelCount"
+                                    value={rowData.CountPeople}
+                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                />
+                            </td>
+                            <td className="input-cell">
+                                <input
+                                    type="text"
+                                    name="personnelCount"
+                                    value={rowData.Note}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -73,4 +90,4 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
     );
 };
 
-export default TableComponent;
+export default TheTeamsThatArrived;

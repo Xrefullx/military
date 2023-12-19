@@ -96,3 +96,42 @@
     margin-left: 8px; /* Adjust this value for spacing */
 }
 
+.centered-tables {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url("/src/participant/1.png");
+}
+
+.text-center {
+    text-align: center;
+}
+
+
+.text-center {
+    text-align: center;
+    font-weight: bold;
+}
+
+.input-text {
+    width: 100px;
+    padding: 8px;
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50; /* Цвет фона */
+    color: white; /* Цвет текста */
+    padding: 10px 20px; /* Отступы вокруг текста */
+    font-size: 16px; /* Размер текста */
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Закругляем углы */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавное изменение цвета фона при наведении */
+}
+
+button:hover {
+    background-color: #d3863a; /* Цвет фона при наведении */
+}

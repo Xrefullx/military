@@ -33,3 +33,63 @@ export const handleRowChange3 = (e, rowIndex,setTableData3) => {
         return newData;
     });
 };
+
+export const handleRowChange4 = (e, rowIndex,setTableData4) => {
+    const { name, value } = e.target;
+    setTableData4((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};
+
+export const handleRowChange5 = (e, rowIndex,setTableData5) => {
+    const { name, value } = e.target;
+    setTableData5((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};
+
+export const handleRowChange6 = (e, rowIndex,setTableData6) => {
+    const { name, value } = e.target;
+    setTableData6((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};
+
+export const handleRowChange7 = (e, rowIndex,setTableData7) => {
+    const { name, value } = e.target;
+    setTableData7((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};
+
+export const handleRowChange8 = (e, rowIndex,setTableData8) => {
+    const { name, value } = e.target;
+    setTableData8((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};

@@ -1,18 +1,18 @@
 import React from 'react';
 
-
-const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
+const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
     return (
         <div className="table-container">
-            <p>2. Основные мероприятия, запланированные на текущие сутки:</p>
+            <p>11.	В период призыва нового пополнения: данные о командах с новым пополнением, находящихся в движении и прибывших за текущие сутки, данные о планируемом приведении к присяге:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>
                     <tr>
-                        <th>Мероприятие</th>
-                        <th>Сроки</th>
-                        <th>Должность, звание, Ф.И.О., мероприятие</th>
-                        <th>Кол-во л/с</th>
+                        <th>Старший команды</th>
+                        <th>Количество л/с</th>
+                        <th>Маршрут следования</th>
+                        <th>Сроки движения</th>
+                        <th>Дата приведения к присяге</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -22,7 +22,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="event"
-                                    value={rowData.event}
+                                    value={rowData.SeniorTeam}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -30,7 +30,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="eventDates"
-                                    value={rowData.eventDates}
+                                    value={rowData.CountPeople}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -38,7 +38,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="eventDetails"
-                                    value={rowData.eventDetails}
+                                    value={rowData.TheRouteOfTheRoute}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -46,7 +46,15 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                                 <input
                                     type="text"
                                     name="personnelCount"
-                                    value={rowData.personnelCount}
+                                    value={rowData.TheTimingOfTheMovement}
+                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                />
+                            </td>
+                            <td className="input-cell">
+                                <input
+                                    type="text"
+                                    name="personnelCount"
+                                    value={rowData.DateOfSwearingIn}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
                             </td>
@@ -73,4 +81,4 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
     );
 };
 
-export default TableComponent;
+export default TheCallForANewReplenishment;
