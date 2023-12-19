@@ -19,7 +19,7 @@ const InformationAboutMilitaryPersonnelOfTheAcademy = ({ tableData, setTableData
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="Division"
                                     value={rowData.Division}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -27,7 +27,7 @@ const InformationAboutMilitaryPersonnelOfTheAcademy = ({ tableData, setTableData
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="OnTheRoad"
                                     value={rowData.OnTheRoad}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -35,7 +35,7 @@ const InformationAboutMilitaryPersonnelOfTheAcademy = ({ tableData, setTableData
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="OnTheWay"
                                     value={rowData.OnTheWay}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />

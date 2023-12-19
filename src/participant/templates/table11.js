@@ -21,7 +21,7 @@ const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="SeniorTeam"
                                     value={rowData.SeniorTeam}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -29,7 +29,7 @@ const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="CountPeople"
                                     value={rowData.CountPeople}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -37,7 +37,7 @@ const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="TheRouteOfTheRoute"
                                     value={rowData.TheRouteOfTheRoute}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -45,7 +45,7 @@ const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="TheTimingOfTheMovement"
                                     value={rowData.TheTimingOfTheMovement}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -53,7 +53,7 @@ const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="DateOfSwearingIn"
                                     value={rowData.DateOfSwearingIn}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />

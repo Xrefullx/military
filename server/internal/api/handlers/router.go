@@ -22,6 +22,7 @@ func Router(cfg models.Config) *gin.Engine {
 		gUser.Use(middleware.JwtValid())
 		{
 			gUser.POST("/login", Login)
+
 		}
 
 	}

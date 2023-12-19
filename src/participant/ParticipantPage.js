@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './styles.css';
 import {addRow,addRow2,addRow3,addRow4,addRow5,addRow6,addRow7,addRow8} from './utils/addRow'
 import {removeRow,removeRow2,removeRow3,removeRow4,removeRow5,removeRow6,removeRow7,removeRow8} from './utils/removeRow'
@@ -31,6 +31,31 @@ function ParticipantPage({ login, setIsAdmin }) {
     tableData7,setTableData7,
     tableData8,setTableData8} = useInitialFormData();
 
+    const [showModal, setShowModal] = useState(false);
+
+    const handleLogout = () => {
+        setShowModal(true);
+    };
+
+    const handleConfirmLogout = () => {
+        localStorage.clear();
+        window.location.reload();
+    };
+
+    const handleCancelLogout = () => {
+        setShowModal(false);
+    };
+
+    const [showModalSend, setShowModalSend] = useState(false);
+
+    const handleSend = () => {
+        setShowModalSend(true);
+    };
+
+    const handleCancelSend = () => {
+        setShowModalSend(false);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const formDataToLog = {
@@ -45,6 +70,7 @@ function ParticipantPage({ login, setIsAdmin }) {
             tableData8,
         };
         console.log('Form submitted:', formDataToLog);
+        setShowModalSend(false);
     };
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -56,6 +82,18 @@ function ParticipantPage({ login, setIsAdmin }) {
 
     return (
         <div>
+            <div>
+                <button className="button-exit" type="button" onClick={handleLogout} >
+                    Выход
+                </button>
+                {showModal && (
+                    <div className="modal">
+                        <p>Точно выйти?</p>
+                        <button onClick={handleConfirmLogout}>Да</button>
+                        <button onClick={handleCancelLogout}>Отмена</button>
+                    </div>
+                )}
+            </div>
             <div className="text-center">
                 <label htmlFor="obstanovkaInput">ОБСТАНОВКА В В/Ч   </label>
                 <input className="input-text"
@@ -89,6 +127,7 @@ function ParticipantPage({ login, setIsAdmin }) {
                 removeRow={removeRow}
                 handleSubmit={handleSubmit}
             />
+
             <TrainingTableComponent
                 tableData={tableData2}
                 setTableData={setTableData2}
@@ -167,8 +206,21 @@ function ParticipantPage({ login, setIsAdmin }) {
                 removeRow={removeRow8}
                 handleSubmit={handleSubmit}
             />
+            <div>
+                <button className="submit-button" type="button" onClick={handleSend}>
+                    Отправить
+                </button>
+                {showModalSend && (
+                    <div className="modal">
+                        <p>Вы уверены в введенных данных?</p>
+                        <button onClick={handleSubmit}>Да</button>
+                        <button onClick={handleCancelSend}>Отмена</button>
+                    </div>
+                )}
+            </div>
         </div>
         </div>
+
     );
 }
 

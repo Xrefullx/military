@@ -20,7 +20,7 @@ const TrainingTableComponent = ({ tableData, setTableData, handleRowChange, addR
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="event2"
                                     value={rowData.event2}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -28,7 +28,7 @@ const TrainingTableComponent = ({ tableData, setTableData, handleRowChange, addR
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="eventDates2"
                                     value={rowData.eventDates2}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -36,7 +36,7 @@ const TrainingTableComponent = ({ tableData, setTableData, handleRowChange, addR
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="eventDetails2"
                                     value={rowData.eventDetails2}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -44,7 +44,7 @@ const TrainingTableComponent = ({ tableData, setTableData, handleRowChange, addR
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="personnelCount2"
                                     value={rowData.personnelCount2}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />

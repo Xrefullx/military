@@ -22,7 +22,7 @@ const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="Division"
                                     value={rowData.Division}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -30,7 +30,7 @@ const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="FIO"
                                     value={rowData.FIO}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -38,7 +38,7 @@ const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="PurposeOfArrival"
                                     value={rowData.PurposeOfArrival}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -46,7 +46,7 @@ const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="Deadlines"
                                     value={rowData.Deadlines}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -54,7 +54,7 @@ const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="CountPeople"
                                     value={rowData.CountPeople}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -62,7 +62,7 @@ const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow,
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="Note"
                                     value={rowData.Note}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />

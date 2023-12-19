@@ -24,7 +24,7 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="recruitmentPlan"
                                     value={formData.recruitmentPlan}
                                     onChange={handleChange}
                                 />
@@ -32,7 +32,7 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="inTotal"
                                     value={formData.inTotal}
                                     onChange={handleChange}
                                 />
@@ -40,7 +40,7 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="fromAmongTheMilitaryPersonnel"
                                     value={formData.fromAmongTheMilitaryPersonnel}
                                     onChange={handleChange}
                                 />
@@ -48,7 +48,7 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="fromAmongTheCadets"
                                     value={formData.fromAmongTheCadets}
                                     onChange={handleChange}
                                 />

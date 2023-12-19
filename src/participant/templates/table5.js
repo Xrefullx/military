@@ -22,7 +22,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="DivisionOrganization"
                                     value={rowData.DivisionOrganization}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -30,7 +30,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="FIOStarshy"
                                     value={rowData.FIOStarshy}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -38,7 +38,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="TypeOfPractice"
                                     value={rowData.TypeOfPractice}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -46,7 +46,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="DatesAndVenue"
                                     value={rowData.DatesAndVenue}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -54,7 +54,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="QuantityOfLs4"
                                     value={rowData.QuantityOfLs4}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -62,7 +62,7 @@ const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,se
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="AdditionalInformation"
                                     value={rowData.AdditionalInformation}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />

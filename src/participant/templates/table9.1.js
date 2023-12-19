@@ -25,7 +25,7 @@ const CadetsOfTheBranch = ({ tableData, setTableData, handleRowChange, addRow, r
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="MilitaryRank"
                                     value={rowData.MilitaryRank}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -33,7 +33,7 @@ const CadetsOfTheBranch = ({ tableData, setTableData, handleRowChange, addRow, r
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="PeopleName"
                                     value={rowData.PeopleName}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />
@@ -41,7 +41,7 @@ const CadetsOfTheBranch = ({ tableData, setTableData, handleRowChange, addRow, r
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="Circumstances"
                                     value={rowData.Circumstances}
                                     onChange={(e) => handleRowChange(e, index, setTableData)}
                                 />

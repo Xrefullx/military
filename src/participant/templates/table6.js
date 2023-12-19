@@ -22,7 +22,7 @@ const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubm
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event"
+                                    name="DivisionOrganizationTable5"
                                     value={rowData.DivisionOrganizationTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -30,7 +30,7 @@ const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubm
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates"
+                                    name="FIOStarshyTable5"
                                     value={rowData.FIOStarshyTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -38,7 +38,7 @@ const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubm
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="ThePurposeOfTheBusinessTripTable5"
                                     value={rowData.ThePurposeOfTheBusinessTripTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -46,7 +46,7 @@ const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubm
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="DatesAndVenueTable5"
                                     value={rowData.DatesAndVenueTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -54,7 +54,7 @@ const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubm
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="QuantityOfLsTable5"
                                     value={rowData.QuantityOfLsTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
@@ -62,7 +62,7 @@ const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubm
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="AdditionalInformationTable5"
                                     value={rowData.AdditionalInformationTable5}
                                     onChange={(e) => handleRowChange(e, index,setTableData)}
                                 />
