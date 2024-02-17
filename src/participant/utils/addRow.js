@@ -105,3 +105,31 @@ export const addRow8 = (setTableData8) => {
         },
     ]);
 };
+
+export const addRow9 = (setTableData9) => {
+    setTableData9((prevData) => [
+        ...prevData,
+        {
+            Number:prevData.length,
+            chief:'',
+            deputyChief:'',
+            deputyChiefUNR:'',
+            deputyChiefArmament:'',
+            deputyChiefRear:'',
+            deputyChiefVPR:'',
+        },
+    ]);
+};
+
+export const addRow10 = (setTableData10) => {
+    setTableData10((prevData) => [
+        ...prevData,
+        {
+            Number:prevData.length,
+            TheFieldOfActivity:'',
+            datesLocation:'',
+            positionTitle:'',
+            kolVoLS:'',
+        },
+    ]);
+};

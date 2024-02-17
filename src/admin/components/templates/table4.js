@@ -1,6 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from "axios";
 
-const WorkingGroupsTableComponent = ({ tableData,setTableData, handleRowChange, addRow,handleSubmit,removeRow  }) => {
+const WorkingGroupsTableComponentReed = () => {
+    const [tableData, setTableData] = useState([]);
+
+    useEffect(() => {
+        axios.get('/table4')
+            .then(response => {
+                setTableData(response.data);
+            })
+            .catch(error => {
+                console.error('Ошибка при получении данных:', error);
+            });
+    }, []);
+    
     return (
         <div className="table-container">
             <p>3. Работа групп (комиссий) от вышестоящих органов управления, кооперации промышленности и представителей воинских частей других видов и родов ВС РФ:</p>
@@ -22,7 +35,7 @@ const WorkingGroupsTableComponent = ({ tableData,setTableData, handleRowChange, 
                                     type="text"
                                     name="TheFieldOfActivity"
                                     value={rowData.TheFieldOfActivity}
-                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                    readOnly
                                 />
                             </td>
                             <td className="input-cell">
@@ -30,7 +43,7 @@ const WorkingGroupsTableComponent = ({ tableData,setTableData, handleRowChange, 
                                     type="text"
                                     name="datesLocation"
                                     value={rowData.datesLocation}
-                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                    readOnly
                                 />
                             </td>
                             <td className="input-cell">
@@ -38,7 +51,7 @@ const WorkingGroupsTableComponent = ({ tableData,setTableData, handleRowChange, 
                                     type="text"
                                     name="positionTitle"
                                     value={rowData.positionTitle}
-                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                    readOnly
                                 />
                             </td>
                             <td className="input-cell">
@@ -46,30 +59,16 @@ const WorkingGroupsTableComponent = ({ tableData,setTableData, handleRowChange, 
                                     type="text"
                                     name="kolVoLS"
                                     value={rowData.kolVoLS}
-                                    onChange={(e) => handleRowChange(e, index, setTableData)}
+                                    readOnly
                                 />
                             </td>
-                            {index !== 0 && (
-                                <td className="input-cell">
-                                    <button
-                                        type="button"
-                                        className="delete-button"
-                                        onClick={() => removeRow(tableData, setTableData,index)}
-                                    >
-                                        Удалить строку
-                                    </button>
-                                </td>
-                            )}
                         </tr>
                     ))}
                     </tbody>
                 </table>
-                <button type="button" onClick={() => addRow(setTableData)}>
-                    Добавить строку
-                </button>
             </form>
         </div>
     );
 };
 
-export default WorkingGroupsTableComponent;
+export default WorkingGroupsTableComponentReed;

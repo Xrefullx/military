@@ -2,24 +2,9 @@ import { useState } from 'react';
 
 export const useInitialFormData = () => {
     const [formData, setFormData] = useState({
+
         obstanovkaInput:'',
         monthInput:'',
-        chief: '',
-        deputyChief: '',
-        deputyChiefUNR: '',
-        deputyChiefArmament: '',
-        deputyChiefRear: '',
-        deputyChiefVPR: '',
-
-        TheFieldOfActivity:'',
-        datesLocation:'',
-        positionTitle:'' ,
-        kolVoLS:'',
-        energyDeviationHeat:'',
-        energyDeviationWater:'',
-        energyDeviationPower:'',
-        StateOfLawAndOrderAndMilitaryDiscipline:'',
-        InformationAboutOfficials:'',
 
         dayORZ: 0,
         dayTotal: 0,
@@ -138,7 +123,30 @@ export const useInitialFormData = () => {
         },
     ]);
 
+    const [tableData9, setTableData9] = useState([
+        {
+            Number:0,
+            chief:'',
+            deputyChief:'',
+            deputyChiefUNR:'',
+            deputyChiefArmament:'',
+            deputyChiefRear:'',
+            deputyChiefVPR:'',
+        },
+    ]);
+
+    const [tableData10, setTableData10] = useState([
+        {
+            Number:0,
+            TheFieldOfActivity:'',
+            datesLocation:'',
+            positionTitle:'',
+            kolVoLS:'',
+        },
+    ]);
+
     return { formData, setFormData, tableData, setTableData, tableData2, setTableData2,
         tableData3, setTableData3, tableData4, setTableData4, tableData5, setTableData5,
-        tableData6, setTableData6,tableData7, setTableData7,tableData8,setTableData8 };
+        tableData6, setTableData6,tableData7, setTableData7,tableData8,setTableData8,
+        tableData9,setTableData9,tableData10,setTableData10};
 };

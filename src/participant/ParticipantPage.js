@@ -1,8 +1,29 @@
 import React, {useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import './styles.css';
-import {addRow,addRow2,addRow3,addRow4,addRow5,addRow6,addRow7,addRow8} from './utils/addRow'
-import {removeRow,removeRow2,removeRow3,removeRow4,removeRow5,removeRow6,removeRow7,removeRow8} from './utils/removeRow'
-import {handleRowChange,handleRowChange2,handleRowChange3,handleRowChange4,handleRowChange5,handleRowChange6,handleRowChange7,handleRowChange8} from './utils/changeRow'
+import {addRow, addRow2, addRow3, addRow4, addRow5, addRow6, addRow7, addRow8, addRow9} from './utils/addRow'
+import {
+    removeRow,
+    removeRow2,
+    removeRow3,
+    removeRow4,
+    removeRow5,
+    removeRow6,
+    removeRow7,
+    removeRow8,
+    removeRow9
+} from './utils/removeRow'
+import {
+    handleRowChange,
+    handleRowChange2,
+    handleRowChange3,
+    handleRowChange4,
+    handleRowChange5,
+    handleRowChange6,
+    handleRowChange7,
+    handleRowChange8,
+    handleRowChange9
+} from './utils/changeRow'
 import TableComponent from "./templates/table2";
 import LeadershipTableComponent from "./templates/table1";
 import TrainingTableComponent from "./templates/table2.1";
@@ -28,8 +49,9 @@ function ParticipantPage({ login, setIsAdmin }) {
         setTableData3, tableData4,
         setTableData4, tableData5, setTableData5
         , tableData6, setTableData6,
-    tableData7,setTableData7,
-    tableData8,setTableData8} = useInitialFormData();
+        tableData7,setTableData7,
+        tableData8,setTableData8,
+        setTableData9,tableData9} = useInitialFormData();
 
     const [showModal, setShowModal] = useState(false);
 
@@ -37,9 +59,11 @@ function ParticipantPage({ login, setIsAdmin }) {
         setShowModal(true);
     };
 
+    const history = useHistory();
+
     const handleConfirmLogout = () => {
         localStorage.clear();
-        window.location.reload();
+        history.push('/login'); // Redirect to the login page or any other desired route
     };
 
     const handleCancelLogout = () => {
@@ -68,6 +92,7 @@ function ParticipantPage({ login, setIsAdmin }) {
             tableData6,
             tableData7,
             tableData8,
+            login
         };
         console.log('Form submitted:', formDataToLog);
         setShowModalSend(false);
@@ -117,7 +142,12 @@ function ParticipantPage({ login, setIsAdmin }) {
             </div>
         <div className="centered-tables"  >
             <LeadershipTableComponent
-                formData={formData} handleChange={handleChange} handleSubmit={handleSubmit}
+                tableData={tableData9}
+                setTableData={setTableData9}
+                handleRowChange={handleRowChange9}
+                addRow={addRow9}
+                removeRow={removeRow9}
+                handleSubmit={handleSubmit}
             />
             <TableComponent
                 tableData={tableData}

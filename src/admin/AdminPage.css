@@ -1,0 +1,56 @@
+/* Add these styles to your existing CSS */
+
+/* Container Styles */
+div {
+    margin: 20px;
+}
+
+/* Table Styles */
+.user-table {
+    width: calc(100% - 100px);
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling on small screens */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Добавляем тень к таблице */
+}
+
+/* Header Styles */
+.user-table th {
+    background-color: #686142;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+}
+
+.user-table tbody tr {
+    background-color: #c4bbbb; /* Сразу делаем фон строки белым */
+}
+
+/* Alternating Row Colors */
+.user-table tbody tr:nth-child(even) {
+    background-color: #c4bbbb;
+}
+
+.user-table tbody tr:nth-child(even) {
+    background-color: #c4bbbb;
+}
+
+/* Cell Styles */
+.user-table th, .user-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+/* Hover Effect on Rows */
+.user-table tbody tr:hover {
+    background-color: #e0e0e0;
+    transition: background-color 0.3s;
+}
+
+
+.button-link {
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Наследуем цвет текста от родительского элемента */
+}

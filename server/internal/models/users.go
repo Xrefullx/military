@@ -6,4 +6,5 @@ type Users struct {
 	Is_admin int64  `json:"is_admin"`
 	Idnum    int64  `json:"idnum"`
 	S_fio    string `json:"s_fio"`
+	S_text   string `json:"s_text"`
 }

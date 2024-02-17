@@ -1,38 +1,67 @@
-.App {
-  text-align: center;
+/* App.css */
+
+body {
+  background-image: url('participant/1.jpg');
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.login-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: center; /* Добавляем центрирование по вертикали */
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 10px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+  max-width: 300px;
+  margin: 250px auto; /* Центрируем форму по горизонтали и добавляем отступ сверху */
+
 }
 
-.App-link {
-  color: #61dafb;
+
+
+
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="submit"] {
+  margin-bottom: 20px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  color: black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.login-form input[type="submit"] {
+  cursor: pointer;
+  background-color: #406237;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.login-form input[type="submit"]:hover {
+  background-color: #b30000;
+}
+
+.login-form label {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.input-styles {
+  margin-top: 10px; /* Увеличиваем отступ между полями ввода */
+}
+
+.input-submit {
+  margin-top: 30px; /* Увеличиваем отступ между кнопкой и предыдущим полем ввода */
+  margin-left: 85px; /* Сдвигаем кнопку на 50px вправо */
+}
+
+.input-container {
+  margin-bottom: 20px; /* Увеличиваем отступ между контейнерами полей */
 }

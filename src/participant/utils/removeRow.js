@@ -43,3 +43,15 @@ export const removeRow8 = (tableData8, setTableData8,index) => {
         setTableData8((prevData) => prevData.filter((_, i) => i !== index));
     }
 };
+
+export const removeRow9 = (tableData9, setTableData9,index) => {
+    if (tableData9.length > 1) {
+        setTableData9((prevData) => prevData.filter((_, i) => i !== index));
+    }
+};
+
+export const removeRow10 = (tableData10, setTableData10,index) => {
+    if (tableData10.length > 1) {
+        setTableData10((prevData) => prevData.filter((_, i) => i !== index));
+    }
+};

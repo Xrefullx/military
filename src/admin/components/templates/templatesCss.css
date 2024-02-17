@@ -1,0 +1,65 @@
+.energy-deviation-row {
+    font-size: 16px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.input-field {
+    width: 200px;
+    padding: 5px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Общие стили */
+.table-container {
+    margin-top: 20px;
+}
+
+/* Стили для заголовка таблицы */
+.thead-style {
+    background-color: #fff; /* Белый фон */
+    color: #000;
+    font-weight: bold;
+}
+
+.header-cell9 {
+    padding: 6px;
+    text-align: center;
+    font-weight: bold;
+    transform: rotate(-90deg);
+    white-space: nowrap;
+    height: 100px;
+}
+
+/* Стили для ячеек ввода данных */
+.input-cell9 {
+    padding: 6px;
+    background-color: rgba(255, 255, 255, 0.38); /* Белый фон */
+}
+
+.input-cell9 input {
+    width: 55px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin: 4px 0;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.input-cell9 input:focus {
+    outline: none;
+    border-color: #4caf50;
+}
+
+.input-cell9 input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.input-cell9 input[type="number"]::-webkit-inner-spin-button,
+.input-cell9 input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

@@ -93,3 +93,28 @@ export const handleRowChange8 = (e, rowIndex,setTableData8) => {
         return newData;
     });
 };
+
+export const handleRowChange9 = (e, rowIndex,setTableData9) => {
+    const { name, value } = e.target;
+    setTableData9((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};
+
+
+export const handleRowChange10 = (e, rowIndex,setTableData10) => {
+    const { name, value } = e.target;
+    setTableData10((prevData) => {
+        const newData = [...prevData];
+        newData[rowIndex] = {
+            ...newData[rowIndex],
+            [name]: value,
+        };
+        return newData;
+    });
+};
