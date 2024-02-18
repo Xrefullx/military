@@ -3,7 +3,7 @@ import React from 'react';
 const InternshipsTableComponent  = ({ tableData, handleRowChange,handleSubmit,setTableData,removeRow,addRow }) => {
     return (
         <div className="table-container">
-            <p>4. Военнослужащие воинской части</p>
+            <p style={{ color: 'white' }}>4. Военнослужащие воинской части</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>

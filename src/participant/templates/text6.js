@@ -6,7 +6,7 @@ const EnergyDeviationRow = ({ formData, handleChange }) => {
         <table>
             <tbody>
             <tr>
-                <td colSpan="8" className="energy-deviation-row">
+                <td colSpan="8" className="energy-deviation-row" style={{ color: 'white' }}>
                     6.    Отклонения тепло
                     <input
                         type="text"

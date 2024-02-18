@@ -5,7 +5,7 @@ const CadetsOfTheBranch = ({ tableData, setTableData, handleRowChange, addRow, r
 
     return (
         <div className="table-container">
-            <p>Военнослужащие филиала, находящиеся на стационарном лечении в медицинских учреждениях вне:</p>
+            <p style={{ color: 'white' }}>Военнослужащие филиала, находящиеся на стационарном лечении в медицинских учреждениях вне:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>

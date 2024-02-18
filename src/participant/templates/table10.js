@@ -3,7 +3,7 @@ import React from "react";
 const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }) => {
     return (
         <div className="table-container">
-            <p>10.	В период поступления абитуриентов, доклад по всем мероприятиям и особенностям данного периода:</p>
+            <p style={{ color: 'white' }}>10.	В период поступления абитуриентов, доклад по всем мероприятиям и особенностям данного периода:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead className="thead-style">
@@ -56,7 +56,7 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails"
+                                    name="fromAmongTheGP"
                                     value={formData.fromAmongTheGP}
                                     onChange={handleChange}
                                 />
@@ -64,7 +64,7 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount"
+                                    name="Note"
                                     value={formData.Note}
                                     onChange={handleChange}
                                 />

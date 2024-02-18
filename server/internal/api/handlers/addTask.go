@@ -12,7 +12,7 @@ import (
 	"net/http"
 )
 
-func AddAnswer(c *gin.Context) {
+func AddTask(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), constant.TimeOutRequest)
 	defer cancel()
 	if !utils.ValidContent(c, "application/json") {
@@ -29,7 +29,7 @@ func AddAnswer(c *gin.Context) {
 	}
 	log.Debug("Добавление новой задачи", zap.Any("task", task))
 
-	id, err := storage.AddAnswer(ctx, task, task.Login)
+	id, err := storage.AddTask(ctx, task)
 
 	if err != nil {
 		log.Error(constant.ErrorWorkDataBase, zap.Error(err), zap.String("func", "AddTask"))

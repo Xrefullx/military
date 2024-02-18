@@ -3,7 +3,7 @@ import React from 'react';
 const DataOnPersonnelOnBusinessTrips  = ({ tableData, handleRowChange,handleSubmit,setTableData,removeRow,addRow }) => {
     return (
         <div className="table-container">
-            <p>5. Данные о личном составе, находящемся в командировках за пределами ППД, караулах и командах по сопровождению воинских грузов: </p>
+            <p style={{ color: 'white' }}>5. Данные о личном составе, находящемся в командировках за пределами ППД, караулах и командах по сопровождению воинских грузов: </p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>

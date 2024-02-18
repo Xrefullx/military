@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import './styles.css';
 import {addRow, addRow2, addRow3, addRow4, addRow5, addRow6, addRow7, addRow8, addRow9} from './utils/addRow'
@@ -40,6 +40,10 @@ import ThePeriodOfAdmissionOfApplicants from "./templates/table10";
 import TheCallForANewReplenishment from "./templates/table11";
 import TheTeamsThatArrived from "./templates/table12";
 import InformationAboutMilitaryPersonnelOfTheAcademy from "./templates/table13";
+import LeadershipTableComponentReed from "../admin/components/templates/table1";
+import axios from "axios";
+import co from "co";
+import WorkingGroupsTableComponentReed from "../admin/components/templates/table4";
 
 
 function ParticipantPage({ login, setIsAdmin }) {
@@ -54,6 +58,11 @@ function ParticipantPage({ login, setIsAdmin }) {
         setTableData9,tableData9} = useInitialFormData();
 
     const [showModal, setShowModal] = useState(false);
+
+    const [inputData, setInputData] = useState({
+        obstanovkaInput: '',
+        monthInput: ''
+    });
 
     const handleLogout = () => {
         setShowModal(true);
@@ -80,6 +89,30 @@ function ParticipantPage({ login, setIsAdmin }) {
         setShowModalSend(false);
     };
 
+    const sendDataToServer = async (formDataToLog) => {
+        try {
+            let token = localStorage.getItem('token');
+
+            if (!token) {
+                token = await getAuthToken();
+                localStorage.setItem('token', token);
+            }
+
+            const response = await axios.post('http://localhost:8080/api/addAnswer', formDataToLog, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+
+            // Опционально: обработка ответа, если необходимо
+            console.log('Response from server:', response.data);
+
+            setShowModalSend(false);
+        } catch (error) {
+            console.error('Error sending data to server:', error);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const formDataToLog = {
@@ -95,6 +128,7 @@ function ParticipantPage({ login, setIsAdmin }) {
             login
         };
         console.log('Form submitted:', formDataToLog);
+        sendDataToServer(formDataToLog);
         setShowModalSend(false);
     };
     const handleChange = (e) => {
@@ -104,6 +138,61 @@ function ParticipantPage({ login, setIsAdmin }) {
             [name]: value,
         }));
     };
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const requestData = {
+                    login: login
+                };
+
+                if (typeof login === 'object' && login.hasOwnProperty('login')) {
+                    requestData.login = login.login;
+                }
+
+                const response = await axios.post('http://localhost:8080/api/textServer', requestData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                if (response.data.data && response.data.data.length > 0) {
+                    const obstanovkaInput = response.data.data[0].obstanovkaInput;
+                    const monthInput = response.data.data[0].monthInput;
+
+                    setInputData({
+                        obstanovkaInput: obstanovkaInput,
+                        monthInput: monthInput
+                    });
+                } else {
+                    console.log('No data received from server');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -120,34 +209,29 @@ function ParticipantPage({ login, setIsAdmin }) {
                 )}
             </div>
             <div className="text-center">
-                <label htmlFor="obstanovkaInput">ОБСТАНОВКА В В/Ч   </label>
+                <label htmlFor="obstanovkaInput" style={{ color: 'white' }}>ОБСТАНОВКА В В/Ч   </label>
                 <input className="input-text"
-                    type="text"
+                       type="text"
                        id="obstanovkaInput"
                        name="obstanovkaInput"
-                    value={formData.obstanovkaInput}
-                    onChange={handleChange}
+                       value={inputData.obstanovkaInput}
+                       readOnly
                 />
             </div>
 
             <div className="text-center ">
-                <label htmlFor="monthInput">на ЧЧ месяц 202  </label>
+                <label htmlFor="monthInput" style={{ color: 'white' }}>на </label>
                 <input className="input-text"
-                    type="text"
+                       type="text"
                        id="monthInput"
                        name="monthInput"
-                    value={formData.month}
-                    onChange={handleChange}
+                       value={inputData.monthInput}
+                       readOnly
                 />
             </div>
         <div className="centered-tables"  >
-            <LeadershipTableComponent
-                tableData={tableData9}
-                setTableData={setTableData9}
-                handleRowChange={handleRowChange9}
-                addRow={addRow9}
-                removeRow={removeRow9}
-                handleSubmit={handleSubmit}
+            <LeadershipTableComponentReed
+                login={login}
             />
             <TableComponent
                 tableData={tableData}
@@ -166,8 +250,8 @@ function ParticipantPage({ login, setIsAdmin }) {
                 removeRow={removeRow2}
                 handleSubmit={handleSubmit}
             />
-            <WorkingGroupsTableComponent
-                tableData={tableData} handleChange={handleChange} handleSubmit={handleSubmit}
+            <WorkingGroupsTableComponentReed
+                login={login}
             />
             <InternshipsTableComponent
                 tableData={tableData3}

@@ -3,7 +3,7 @@ import React from 'react';
 const TheTeamsThatArrived = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
     return (
         <div className="table-container">
-            <p>12. Прибывшие в воинскую часть</p>
+            <p style={{ color: 'white' }}>12. Прибывшие в воинскую часть</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>

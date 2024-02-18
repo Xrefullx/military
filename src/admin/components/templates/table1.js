@@ -1,22 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const LeadershipTableComponentReed = () => {
-    const [tableData, setTableData] = useState([]);
+const LeadershipTableComponentReed = ({ login }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table1')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
-    }, []);
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const requestData = {
+                    login: login
+                };
+
+                if (typeof login === 'object' && login.hasOwnProperty('login')) {
+                    requestData.login = login.login;
+                }
+
+                const response = await axios.post('http://localhost:8080/api/table1', requestData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+
+                setTableData(response.data.user); // Обновляем state с данными пользователя
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [login]);
 
     return (
         <div className="table-container">
-            <p>1. Информация по руководящему составу:</p>
+            <p style={{ color: 'white' }}>1. Информация по руководящему составу:</p>
             <table className="table">
                 <thead>
                 <tr>
@@ -29,14 +65,14 @@ const LeadershipTableComponentReed = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {tableData.map((rowData, index) => (
+                {user.map((rowData, index) => (
                     <tr key={index}>
                         <td className="input-cell">
                             <input
                                 type="text"
                                 name="chief"
                                 value={rowData.chief}
-                                readOnly 
+                                readOnly
                             />
                         </td>
                         <td className="input-cell">
@@ -44,7 +80,7 @@ const LeadershipTableComponentReed = () => {
                                 type="text"
                                 name="deputyChief"
                                 value={rowData.deputyChief}
-                                readOnly 
+                                readOnly
                             />
                         </td>
                         <td className="input-cell">
@@ -52,7 +88,7 @@ const LeadershipTableComponentReed = () => {
                                 type="text"
                                 name="deputyChiefUNR"
                                 value={rowData.deputyChiefUNR}
-                                readOnly 
+                                readOnly
                             />
                         </td>
                         <td className="input-cell">
@@ -60,7 +96,7 @@ const LeadershipTableComponentReed = () => {
                                 type="text"
                                 name="deputyChiefArmament"
                                 value={rowData.deputyChiefArmament}
-                                readOnly 
+                                readOnly
                             />
                         </td>
                         <td className="input-cell">
@@ -68,7 +104,7 @@ const LeadershipTableComponentReed = () => {
                                 type="text"
                                 name="deputyChiefRear"
                                 value={rowData.deputyChiefRear}
-                                readOnly 
+                                readOnly
                             />
                         </td>
                         <td className="input-cell">
@@ -76,7 +112,7 @@ const LeadershipTableComponentReed = () => {
                                 type="text"
                                 name="deputyChiefVPR"
                                 value={rowData.deputyChiefVPR}
-                                readOnly 
+                                readOnly
                             />
                         </td>
                     </tr>

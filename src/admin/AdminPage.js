@@ -24,6 +24,7 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
     const totalScreens = 3;
     const [showModal, setShowModal] = useState(false);
     const [showModalSend, setShowModalSend] = useState(false);
+    const [userIdnum, setUserIdnum] = useState(null);
 
     const handleConfirmLogout = () => {
         localStorage.clear();
@@ -112,7 +113,8 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
         fetchData();
     }, []);
 
-    const openModal = () => {
+    const openModal = (idnum) => {
+        setUserIdnum(idnum);
         setModalIsOpen(true);
     };
 
@@ -128,20 +130,41 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const formDataToLog = {
             formData,
             tableData9,
             tableData10,
-            login
+            login,
+            userIdnum
         };
-        console.log('Form submitted:', formDataToLog);
-        setShowModalSend(false);
-        setModalIsOpen(false);
 
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('Token not found in localStorage.');
+                return;
+            }
 
+            const response = await axios.post('http://localhost:8080/api/addTask', formDataToLog, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            console.log('Data sent to server:', formDataToLog);
+            setShowModalSend(false);
+            setModalIsOpen(false);
+        } catch (error) {
+            if (error.response && error.response.status === 500) {
+                alert('Заполните все поля');
+            } else {
+                console.error('Error sending data to server:', error);
+            }
+        }
     };
+
 
     const handleNextScreen = () => {
         setCurrentScreen((prevScreen) => (prevScreen === totalScreens ? 1 : prevScreen + 1));
@@ -187,7 +210,7 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
 
                         <td>Был</td>
                         <td>
-                            <button onClick={openModal}>Задать</button>
+                            <button onClick={() => openModal(user.idnum)}>Задать</button>
                         </td>
                     </tr>
                 ))}

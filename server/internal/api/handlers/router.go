@@ -23,6 +23,11 @@ func Router(cfg models.Config) *gin.Engine {
 		{
 			gUser.POST("/login", Login)
 			gUser.GET("/getUsers", GetUsers)
+			gUser.POST("/addTask", AddTask)
+			gUser.POST("/table1", GetTable1)
+			gUser.POST("/textServer", TextServer)
+			gUser.POST("/table4", GetTable4)
+			gUser.POST("/addAnswer", AddAnswer)
 		}
 
 	}

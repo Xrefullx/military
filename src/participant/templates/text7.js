@@ -6,7 +6,7 @@ const StateOfLawAndOrderAndMilitaryDiscipline = ({ formData, handleChange }) => 
         <table>
             <tbody>
             <tr>
-                <td colSpan="8" className="energy-deviation-row">
+                <td colSpan="8" className="energy-deviation-row" style={{ color: 'white' }}>
                     7.  Состояние правопорядка и воинской дисциплины, криминогенной обстановки в районе дислокации воинской части
                     <input
                         type="text"

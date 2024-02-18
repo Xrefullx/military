@@ -4,7 +4,7 @@ import React from 'react';
 const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
     return (
         <div className="table-container">
-            <p>2. Основные мероприятия, запланированные на текущие сутки:</p>
+            <p style={{ color: 'white' }}>2. Основные мероприятия, запланированные на текущие сутки:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>

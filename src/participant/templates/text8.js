@@ -6,7 +6,7 @@ const InformationAboutOfficials = ({ formData, handleChange }) => {
         <table>
             <tbody>
             <tr>
-                <td colSpan="8" className="energy-deviation-row">
+                <td colSpan="8" className="energy-deviation-row" style={{ color: 'white' }}>
                     8.	Данные о должностных лицах, занимающих руководящие должности, находящиеся на излечении в медицинских учреждениях:
                     <input
                         type="text"
