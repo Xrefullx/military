@@ -10,7 +10,7 @@ const StateOfLawAndOrderAndMilitaryDisciplineReed = ({id_answer}) => {
             const requestData = {
                 apiToken: 'Xrefullx',
             };
-            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            const response = await axios.post('https://dynamicforces.ru/api/auth', requestData);
             return response.data.token;
         } catch (error) {
             console.error('Error while fetching auth token:', error);
@@ -28,7 +28,7 @@ const StateOfLawAndOrderAndMilitaryDisciplineReed = ({id_answer}) => {
                     localStorage.setItem('token', token);
                 }
 
-                const response = await axios.get(`http://localhost:8080/api/text7/${id_answer}`, {
+                const response = await axios.get(`https://dynamicforces.ru/api/text7/${id_answer}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

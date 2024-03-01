@@ -36,7 +36,7 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
             const requestData = {
                 apiToken: 'Xrefullx',
             };
-            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            const response = await axios.post('https://dynamicforces.ru/api/auth', requestData);
             return response.data.token;
         } catch (error) {
             console.error('Error while fetching auth token:', error);
@@ -69,7 +69,7 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
                     }
                 }
 
-                const usersResponse = await axios.get('http://localhost:8080/api/getUsers', {
+                const usersResponse = await axios.get('https://dynamicforces.ru/api/getUsers', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -90,7 +90,7 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
                         token = await refreshToken();
                         localStorage.setItem('token', token);
 
-                        const retryResponse = await axios.get('http://localhost:8080/api/getUsers', {
+                        const retryResponse = await axios.get('https://dynamicforces.ru/api/getUsers', {
                             headers: {
                                 Authorization: `Bearer ${token}`,
                             },
@@ -147,7 +147,7 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
                 return;
             }
 
-            const response = await axios.post('http://localhost:8080/api/addTask', formDataToLog, {
+            const response = await axios.post('https://dynamicforces.ru/api/addTask', formDataToLog, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

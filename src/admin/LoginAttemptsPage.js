@@ -22,7 +22,7 @@ function LoginAttemptsPage({ match }) {
             const requestData = {
                 apiToken: 'Xrefullx',
             };
-            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            const response = await axios.post('https://dynamicforces.ru/api/auth', requestData);
             return response.data.token;
         } catch (error) {
             console.error('Error while fetching auth token:', error);
@@ -40,7 +40,7 @@ function LoginAttemptsPage({ match }) {
                     localStorage.setItem('token', token);
                 }
 
-                const historyResponse = await axios.get(`http://localhost:8080/api/history/${userId}`, {
+                const historyResponse = await axios.get(`https://dynamicforces.ru/api/history/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

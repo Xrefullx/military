@@ -21,10 +21,10 @@ function App() {
         apiToken: 'Xrefullx',
       };
 
-      const response = await axios.post('http://localhost:8080/api/auth', requestData);
+      const response = await axios.post('https://dynamicforces.ru/api/auth', requestData);
       const token = response.data.token;
 
-      const loginResponse = await axios.post('http://localhost:8080/api/login', {
+      const loginResponse = await axios.post('https://dynamicforces.ru/api/login', {
         login: login,
         password: password
       }, {

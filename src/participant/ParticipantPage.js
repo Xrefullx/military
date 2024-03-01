@@ -100,7 +100,7 @@ function ParticipantPage({ login, setIsAdmin }) {
                 localStorage.setItem('token', token);
             }
 
-            const response = await axios.post('http://localhost:8080/api/addAnswer', formDataToLog, {
+            const response = await axios.post('https://dynamicforces.ru/api/addAnswer', formDataToLog, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -153,7 +153,7 @@ function ParticipantPage({ login, setIsAdmin }) {
             const requestData = {
                 apiToken: 'Xrefullx',
             };
-            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            const response = await axios.post('https://dynamicforces.ru/api/auth', requestData);
             return response.data.token;
         } catch (error) {
             console.error('Error while fetching auth token:', error);
@@ -179,7 +179,7 @@ function ParticipantPage({ login, setIsAdmin }) {
                     requestData.login = login.login;
                 }
 
-                const response = await axios.post('http://localhost:8080/api/textServer', requestData, {
+                const response = await axios.post('https://dynamicforces.ru/api/textServer', requestData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }

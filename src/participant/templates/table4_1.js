@@ -9,7 +9,7 @@ const LeadershipTableComponentReed2 = ({ login }) => {
             const requestData = {
                 apiToken: 'Xrefullx',
             };
-            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            const response = await axios.post('https://dynamicforces.ru/api/auth', requestData);
             return response.data.token;
         } catch (error) {
             console.error('Error while fetching auth token:', error);
@@ -35,7 +35,7 @@ const LeadershipTableComponentReed2 = ({ login }) => {
                     requestData.login = login.login;
                 }
 
-                const response = await axios.post('http://localhost:8080/api/table1', requestData, {
+                const response = await axios.post('https://dynamicforces.ru/api/table1', requestData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
