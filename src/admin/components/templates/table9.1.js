@@ -2,36 +2,64 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
 
-const CadetsOfTheBranch = () => {
-    const [tableData, setTableData] = useState([]);
+const CadetsOfTheBranchReed = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table9-1')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/table91/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
     
     return (
         <div className="table-container">
-            <p>Военнослужащие филиала, находящиеся на стационарном лечении в медицинских учреждениях вне:</p>
-            <form onSubmit={handleSubmit}>
+            <p style={{ color: 'white' }}>Люди, находящиеся на стационарном лечении в медицинских учреждениях вне объекта:</p>
+            <form>
                 <table className="table">
                     <thead>
                     <tr>
                         <th>№ п/п</th>
-                        <th>В/звание, подразделение</th>
+                        <th>Подразделение</th>
                         <th>Фамилия, имя, отчество</th>
                         <th>Обстоятельства</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {tableData.map((rowData, index) => (
+                    {user.map((rowData, index) => (
                         <tr key={index}>
-                            <td className="input-cell">
+                            <td style={{ color: 'white' }} className="input-cell">
                                 {index + 1}
                             </td>
                             <td className="input-cell">
@@ -67,4 +95,4 @@ const CadetsOfTheBranch = () => {
     );
 };
 
-export default CadetsOfTheBranch;
+export default CadetsOfTheBranchReed;

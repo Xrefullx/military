@@ -54,3 +54,11 @@ div {
     text-decoration: none; /* Убираем подчеркивание */
     color: inherit; /* Наследуем цвет текста от родительского элемента */
 }
+
+.green-text {
+    color: green;
+}
+
+.red-text {
+    color: red;
+}

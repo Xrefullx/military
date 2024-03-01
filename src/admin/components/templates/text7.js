@@ -2,30 +2,58 @@ import React, {useEffect, useState} from 'react';
 import './templatesCss.css';
 import axios from "axios";
 
-const StateOfLawAndOrderAndMilitaryDiscipline = () => {
-    const [tableData, setTableData] = useState([]);
+const StateOfLawAndOrderAndMilitaryDisciplineReed = ({id_answer}) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/text7')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/text7/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     return (
         <table>
             <tbody>
-            {tableData.map((rowData, index) => (
+            {user.map((rowData, index) => (
                 <tr key={index}>
-                <td colSpan="8" className="energy-deviation-row">
-                    7.  Состояние правопорядка и воинской дисциплины, криминогенной обстановки в районе дислокации воинской части
+                    <td colSpan="8" className="energy-deviation-row" style={{ color: 'white' }}>
+                    7.  Состояние криминогенной обстановки в районе дислокации объекта:
                     <input
                         type="text"
                         name="StateOfLawAndOrderAndMilitaryDiscipline"
-                        value={tableData.StateOfLawAndOrderAndMilitaryDiscipline}
+                        value={rowData.stateOfLawAndOrderAndMilitaryDiscipline}
                         readOnly
                         className="input-field"
                     />
@@ -37,5 +65,5 @@ const StateOfLawAndOrderAndMilitaryDiscipline = () => {
     );
 };
 
-export default StateOfLawAndOrderAndMilitaryDiscipline;
+export default StateOfLawAndOrderAndMilitaryDisciplineReed;
 

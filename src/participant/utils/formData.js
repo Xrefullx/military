@@ -31,10 +31,10 @@ export const useInitialFormData = () => {
         totalPneumonia: 0,
 
         recruitmentPlan:'',
-        inTotal:0,
-        fromAmongTheMilitaryPersonnel:0,
-        fromAmongTheCadets:0,
-        fromAmongTheGP:0,
+        inTotal:'',
+        fromAmongTheMilitaryPersonnel:'',
+        fromAmongTheCadets:'',
+        fromAmongTheGP:'',
         Note:'',
     });
 

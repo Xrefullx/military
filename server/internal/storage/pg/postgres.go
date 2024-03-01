@@ -50,9 +50,26 @@ func (PS *PgStorage) Authentication(ctx context.Context, user models.Users) (int
 }
 
 func (PS *PgStorage) GetAllUsers(ctx context.Context) ([]models.Users, error) {
-	rows, err := PS.connect.QueryContext(ctx, `SELECT idnum, COALESCE(login,'') login, COALESCE(password,'') password, COALESCE(s_fio,'') s_fio,
-	COALESCE(s_text,'') s_text, COALESCE(is_admin,0)
-		FROM public.users;`)
+	rows, err := PS.connect.QueryContext(ctx, `SELECT DISTINCT 
+    u.idnum, 
+    COALESCE(u.login,'') AS login, 
+    COALESCE(u.password,'') AS password, 
+    COALESCE(u.s_fio,'') AS s_fio,
+    COALESCE(u.s_text,'') AS s_text, 
+    COALESCE(u.is_admin,0) AS is_admin,
+    CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM public."usersAnswer" a 
+            WHERE a.f_users = u.idnum 
+            AND a.d_finish >= NOW() - INTERVAL '1 day'
+        ) THEN 1 
+        ELSE 0 
+    END AS has_entry_last_24h
+FROM 
+    public.users u
+WHERE 
+    u.is_admin = 0;;`)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +78,7 @@ func (PS *PgStorage) GetAllUsers(ctx context.Context) ([]models.Users, error) {
 	for rows.Next() {
 		var users models.Users
 		err := rows.Scan(&users.Idnum, &users.Login, &users.Password, &users.S_fio,
-			&users.S_text, &users.Is_admin)
+			&users.S_text, &users.Is_admin, &users.Has_entry_last_24h)
 		if err != nil {
 			return nil, err
 		}
@@ -91,11 +108,16 @@ func (PS *PgStorage) AddTask(ctx context.Context, task models.AddTask) (int64, e
 		err = tx.Commit()
 	}()
 
+	_, err = tx.ExecContext(ctx, `UPDATE public."usersAnswer" SET is_complete = 5 WHERE f_users = $1 AND is_complete != 1`, task.UserIdnum)
+	if err != nil {
+		return 0, err
+	}
+
 	var id_answer int64
 	err = tx.QueryRowContext(ctx, `
 		INSERT INTO public."usersAnswer"(f_users, d_create)  
 		VALUES ($1, now()) RETURNING id_answer
-	`, task.UserIdnum, task.Login).Scan(&id_answer)
+	`, task.UserIdnum).Scan(&id_answer)
 	if err != nil {
 		return 0, err
 	}
@@ -144,7 +166,7 @@ func (PS *PgStorage) GetTable1(ctx context.Context, login string) ([]models.Tabl
 	}
 
 	var idnumAnswer int64
-	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
+	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 and is_complete is null order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +211,7 @@ func (PS *PgStorage) TextServer(ctx context.Context, login string) ([]models.For
 	}
 
 	var idnumAnswer int64
-	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
+	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 and is_complete is null order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
 	if err != nil {
 		return nil, err
 	}
@@ -227,7 +249,7 @@ func (PS *PgStorage) GetTable4(ctx context.Context, login string) ([]models.Tabl
 	}
 
 	var idnumAnswer int64
-	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
+	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 and is_complete is null order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +310,7 @@ func (PS *PgStorage) AddAnswer(ctx context.Context, task models.AddTask, login s
 	}
 
 	var idnumAnswer int64
-	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 and is_complete != null order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
+	err = PS.connect.QueryRowContext(ctx, `SELECT id_answer FROM public."usersAnswer" WHERE f_users = $1 and is_complete is null order by d_create desc limit 1;`, idnum).Scan(&idnumAnswer)
 	if err != nil {
 		return 0, err
 	}
@@ -458,11 +480,575 @@ func (PS *PgStorage) AddAnswer(ctx context.Context, task models.AddTask, login s
 		return 0, err
 	}
 
-	_, err = tx.ExecContext(ctx, `Update public."usersAnswer" set is_complete = 1 where id_answer = $1 `,
+	_, err = tx.ExecContext(ctx, `Update public."usersAnswer" set is_complete = 1, d_finish = now()  where id_answer = $1 `,
 		idnumAnswer)
 	if err != nil {
 		return 0, err
 	}
 
 	return idnumAnswer, nil
+}
+
+func (PS *PgStorage) GetHistoryById(ctx context.Context, idnum int64) ([]models.History, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT idnum, id_answer, d_create, d_finish
+	FROM public."usersAnswer"
+		where f_users = $1 and is_complete = 1;`, idnum)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
+	var userses []models.History
+	for rows.Next() {
+		var users models.History
+		err := rows.Scan(&users.Idnum, &users.Id_answer, &users.D_create, &users.D_finish)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.History{}
+	}
+
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTextServer(ctx context.Context, id_answer int64) ([]models.FormData, error) {
+
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(obstanovka, '') as chief, 
+    COALESCE(s_date, '') as "deputyChief" 
+	FROM public."textFromServer"
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var userses []models.FormData
+	for rows.Next() {
+		var users models.FormData
+		err := rows.Scan(&users.ObstanovkaInput, &users.MonthInput)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.FormData{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable1Get(ctx context.Context, id_answer int64) ([]models.TableData9, error) {
+
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(idnum, 0) as idnum, 
+    COALESCE(chief, '') as chief, 
+    COALESCE("deputyChief", '') as "deputyChief", 
+    COALESCE("deputyChiefUNR", '') as "deputyChiefUNR", 
+    COALESCE("deputyChiefArmament", '') as "deputyChiefArmament", 
+    COALESCE("deputyChiefRear", '') as "deputyChiefRear", 
+    COALESCE("deputyChiefVPR", '') as "deputyChiefVPR"
+FROM public.table1
+where "Id_users_answer" = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var userses []models.TableData9
+	for rows.Next() {
+		var users models.TableData9
+		err := rows.Scan(&users.Number, &users.Chief, &users.DeputyChief, &users.DeputyChiefUNR, &users.DeputyChiefArmament,
+			&users.DeputyChiefRear, &users.DeputyChiefVPR)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData9{}
+	}
+
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable2(ctx context.Context, id_answer int64) ([]models.TableData, error) {
+
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(idnum, 0) as idnum, 
+    COALESCE(event, '') as event, 
+    COALESCE("eventDates", '') as "eventDates", 
+    COALESCE("eventDetails", '') as "eventDetails", 
+    COALESCE("personnelCount", '') as "personnelCount"
+	FROM public.table2
+	where id_answer_users = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var userses []models.TableData
+	for rows.Next() {
+		var users models.TableData
+		err := rows.Scan(&users.Number, &users.Event, &users.EventDates, &users.EventDetails, &users.PersonnelCount)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData{}
+	}
+
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable21(ctx context.Context, id_answer int64) ([]models.TableData2, error) {
+
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(idnum, 0) as idnum, 
+    COALESCE(event2, '') as event2, 
+    COALESCE("eventDates2", '') as "eventDates2", 
+    COALESCE("eventDetails2", '') as "eventDetails2", 
+    COALESCE("personnelCount2", '') as "personnelCount2"
+	FROM public."table2.1"
+	where id_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var userses []models.TableData2
+	for rows.Next() {
+		var users models.TableData2
+		err := rows.Scan(&users.Number, &users.Event2, &users.EventDates2, &users.EventDetails2, &users.PersonnelCount2)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData2{}
+	}
+
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable4Get(ctx context.Context, id_answer int64) ([]models.TableData10, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(idnum, 0) as idnum, 
+    COALESCE("TheFieldOfActivity", '') as TheFieldOfActivity, 
+    COALESCE("datesLocation", '') as "datesLocation", 
+    COALESCE("positionTitle", '') as "positionTitle", 
+    COALESCE("kolVoLS", '') as "kolVoLS"
+	FROM public.table4
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData10
+	for rows.Next() {
+		var users models.TableData10
+		err := rows.Scan(&users.Number, &users.TheFieldOfActivity, &users.DatesLocation, &users.PositionTitle, &users.KolVoLS)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData10{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable5(ctx context.Context, id_answer int64) ([]models.TableData3, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(idnum, 0) as idnum, 
+    COALESCE("DivisionOrganization", '') as "DivisionOrganization", 
+    COALESCE("FIOStarshy", '') as "FIOStarshy", 
+    COALESCE("TypeOfPractice", '') as "TypeOfPractice", 
+    COALESCE("DatesAndVenue", '') as "DatesAndVenue",
+    COALESCE("QuantityOfLs4", '') as "DivisionOrganization", 
+    COALESCE("AdditionalInformation", '') as "FIOStarshy"
+	FROM public.table5
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData3
+	for rows.Next() {
+		var users models.TableData3
+		err := rows.Scan(&users.Number, &users.DivisionOrganization, &users.FIOStarshy, &users.TypeOfPractice, &users.DatesAndVenue,
+			&users.QuantityOfLs4, &users.AdditionalInformation)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData3{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable6(ctx context.Context, id_answer int64) ([]models.TableData4, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE(idnum, 0) as idnum, 
+    COALESCE("DivisionOrganizationTable5", '') as "DivisionOrganizationTable5", 
+    COALESCE("FIOStarshyTable5", '') as "FIOStarshyTable5", 
+    COALESCE("ThePurposeOfTheBusinessTripTable5", '') as "ThePurposeOfTheBusinessTripTable5", 
+    COALESCE("DatesAndVenueTable5", '') as "DatesAndVenueTable5",
+    COALESCE("QuantityOfLsTable5", '') as "QuantityOfLsTable5", 
+    COALESCE("AdditionalInformationTable5", '') as "AdditionalInformationTable5"
+	FROM public.table6
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData4
+	for rows.Next() {
+		var users models.TableData4
+		err := rows.Scan(&users.Number, &users.DivisionOrganizationTable5, &users.FIOStarshyTable5, &users.ThePurposeOfTheBusinessTripTable5, &users.DatesAndVenueTable5,
+			&users.QuantityOfLsTable5, &users.AdditionalInformationTable5)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData4{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetText6(ctx context.Context, id_answer int64) ([]models.FormData, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("energyDeviationHeat", '') as "energyDeviationHeat", 
+    COALESCE("energyDeviationWater", '') as "energyDeviationWater",
+    COALESCE("energyDeviationPower", '') as "energyDeviationPower"
+	FROM public.text6
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.FormData
+	for rows.Next() {
+		var users models.FormData
+		err := rows.Scan(&users.EnergyDeviationHeat, &users.EnergyDeviationWater, &users.EnergyDeviationPower)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.FormData{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetText7(ctx context.Context, id_answer int64) ([]models.FormData, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("StateOfLawAndOrderAndMilitaryDiscipline", '') as "StateOfLawAndOrderAndMilitaryDiscipline"
+	FROM public.text7
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.FormData
+	for rows.Next() {
+		var users models.FormData
+		err := rows.Scan(&users.StateOfLawAndOrderAndMilitaryDiscipline)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.FormData{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetText8(ctx context.Context, id_answer int64) ([]models.FormData, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("InformationAboutOfficials", '') as "InformationAboutOfficials"
+	FROM public.text8
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.FormData
+	for rows.Next() {
+		var users models.FormData
+		err := rows.Scan(&users.InformationAboutOfficials)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.FormData{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable9(ctx context.Context, id_answer int64) ([]models.FormData, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("dayTotal", 0) as "dayTotal", 
+    COALESCE("dayORZ", 0) as "energyDeviationWater",
+    COALESCE("dayPneumonia", 0) as "energyDeviationPower",
+    COALESCE("soldiersHospitalTotal", 0) as "soldiersHospitalTotal", 
+    COALESCE("soldiersHospitalORZ", 0) as "soldiersHospitalORZ",
+    COALESCE("soldiersHospitalPneumonia", 0) as "soldiersHospitalPneumonia",
+    COALESCE("cadetsHospitalTotal", 0) as "cadetsHospitalTotal", 
+    COALESCE("cadetsHospitalORZ", 0) as "cadetsHospitalORZ",
+    COALESCE("cadetsHospitalPneumonia", 0) as "cadetsHospitalPneumonia",
+    COALESCE("soldiersStationaryTotal", 0) as "soldiersStationaryTotal", 
+    COALESCE("soldiersORZ", 0) as "soldiersORZ",
+    COALESCE("soldiersPneumonia", 0) as "soldiersPneumonia",
+    COALESCE("cadetsStationaryTotal", 0) as "cadetsStationaryTotal", 
+    COALESCE("cadetsORZ", 0) as "cadetsORZ",
+    COALESCE("cadetsPneumonia", 0) as "cadetsPneumonia",
+    COALESCE("totalTotal", 0) as "totalTotal", 
+    COALESCE("totalORZ", 0) as "totalORZ",
+    COALESCE("totalPneumonia", 0) as "totalPneumonia"
+	FROM public.table9
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.FormData
+	for rows.Next() {
+		var users models.FormData
+		err := rows.Scan(&users.DayTotal, &users.DayORZ, &users.DayPneumonia,
+			&users.SoldiersHospitalTotal, &users.SoldiersHospitalORZ, &users.SoldiersHospitalPneumonia,
+			&users.CadetsHospitalTotal, &users.CadetsHospitalORZ, &users.CadetsHospitalPneumonia,
+			&users.SoldiersStationaryTotal, &users.SoldiersORZ, &users.SoldiersPneumonia,
+			&users.CadetsStationaryTotal, &users.CadetsORZ, &users.CadetsPneumonia,
+			&users.TotalTotal, &users.TotalORZ, &users.TotalPneumonia)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.FormData{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable91(ctx context.Context, id_answer int64) ([]models.TableData5, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("MilitaryRank", '') as "MilitaryRank",
+    COALESCE("PeopleName", '') as "PeopleName",
+    COALESCE("Circumstances", '') as "Circumstances"
+	FROM public."table9.1"
+	where f_user_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData5
+	for rows.Next() {
+		var users models.TableData5
+		err := rows.Scan(&users.MilitaryRank, &users.PeopleName, &users.Circumstances)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData5{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable10(ctx context.Context, id_answer int64) ([]models.FormData, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("recruitmentPlan", '') as "recruitmentPlan",
+    COALESCE("inTotal", '') as "inTotal",
+    COALESCE("fromAmongTheMilitaryPersonnel", '') as "fromAmongTheMilitaryPersonnel",
+    COALESCE("fromAmongTheCadets", '') as "fromAmongTheCadets",
+    COALESCE("fromAmongTheGP", '') as "fromAmongTheGP",
+    COALESCE("Note", '') as "Note"
+	FROM public.table10
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.FormData
+	for rows.Next() {
+		var users models.FormData
+		err := rows.Scan(&users.RecruitmentPlan, &users.InTotal, &users.FromAmongTheMilitaryPersonnel,
+			&users.FromAmongTheCadets, &users.FromAmongTheGP, &users.Note)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.FormData{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable11(ctx context.Context, id_answer int64) ([]models.TableData6, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("SeniorTeam", '') as "SeniorTeam",
+    COALESCE("CountPeople", '') as "CountPeople",
+    COALESCE("TheRouteOfTheRoute", '') as "TheRouteOfTheRoute",
+    COALESCE("TheTimingOfTheMovement", '') as "TheTimingOfTheMovement",
+    COALESCE("DateOfSwearingIn", '') as "DateOfSwearingIn"
+	FROM public.table11
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData6
+	for rows.Next() {
+		var users models.TableData6
+		err := rows.Scan(&users.SeniorTeam, &users.CountPeople, &users.TheRouteOfTheRoute,
+			&users.TheTimingOfTheMovement, &users.DateOfSwearingIn)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData6{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable12(ctx context.Context, id_answer int64) ([]models.TableData7, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("Division", '') as "Division",
+    COALESCE("FIO", '') as "FIO",
+    COALESCE("PurposeOfArrival", '') as "PurposeOfArrival",
+    COALESCE("Deadlines", '') as "Deadlines",
+    COALESCE("CountPeople", '') as "CountPeople",
+    COALESCE("Note", '') as "Note"
+	FROM public.table12
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData7
+	for rows.Next() {
+		var users models.TableData7
+		err := rows.Scan(&users.Division, &users.FIO, &users.PurposeOfArrival,
+			&users.Deadlines, &users.CountPeople, &users.Note)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData7{}
+	}
+	return userses, nil
+}
+
+func (PS *PgStorage) GetTable13(ctx context.Context, id_answer int64) ([]models.TableData8, error) {
+	rows, err := PS.connect.QueryContext(ctx, `SELECT 
+    COALESCE("Division", '') as "Division",
+    COALESCE("OnTheRoad", '') as "OnTheRoad",
+    COALESCE("OnTheWay", '') as "OnTheWay"
+	FROM public.table13
+	where f_users_answer = $1;`, id_answer)
+	if err != nil {
+		return nil, err
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+		}
+	}(rows)
+	var userses []models.TableData8
+	for rows.Next() {
+		var users models.TableData8
+		err := rows.Scan(&users.Division, &users.OnTheRoad, &users.OnTheWay)
+		if err != nil {
+			return nil, err
+		}
+		userses = append(userses, users)
+	}
+
+	if len(userses) == 0 {
+		userses = []models.TableData8{}
+	}
+	return userses, nil
 }

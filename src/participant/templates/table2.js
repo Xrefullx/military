@@ -11,7 +11,7 @@ const TableComponent = ({ tableData, setTableData, handleRowChange, addRow, remo
                     <tr>
                         <th>Мероприятие</th>
                         <th>Сроки</th>
-                        <th>Должность, звание, Ф.И.О., мероприятие</th>
+                        <th>Ф.И.О., мероприятие</th>
                         <th>Кол-во л/с</th>
                     </tr>
                     </thead>

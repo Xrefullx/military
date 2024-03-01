@@ -1,28 +1,56 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const TheTeamsThatArrived = () => {
-    const [tableData, setTableData] = useState([]);
+const TheTeamsThatArrivedReed = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table12')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/table12/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
     
     return (
         <div className="table-container">
-            <p>12. Прибывшие в воинскую часть</p>
-            <form onSubmit={handleSubmit}>
+            <p style={{ color: 'white' }}>12. Прибывшие на объект команды:</p>
+            <form>
                 <table className="table">
                     <thead>
                     <tr>
                         <th>Подразделение (организация)</th>
-                        <th>Количество л/с</th>
+                        <th>ФИО (старший)</th>
                         <th>Цель прибытия</th>
                         <th>Сроки</th>
                         <th>Кол-во л/с</th>
@@ -30,7 +58,7 @@ const TheTeamsThatArrived = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {tableData.map((rowData, index) => (
+                    {user.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
                                 <input
@@ -89,4 +117,4 @@ const TheTeamsThatArrived = () => {
     );
 };
 
-export default TheTeamsThatArrived;
+export default TheTeamsThatArrivedReed;

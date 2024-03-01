@@ -3,7 +3,7 @@ import React from 'react';
 const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange, addRow, removeRow, handleSubmit }) => {
     return (
         <div className="table-container">
-            <p style={{ color: 'white' }}>11.	В период призыва нового пополнения: данные о командах с новым пополнением, находящихся в движении и прибывших за текущие сутки, данные о планируемом приведении к присяге:</p>
+            <p style={{ color: 'white' }}>11.	В период проведения стажировки: данные о командах со стажирующимися, находящихся в движении и прибывших за текущие сутки: </p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>
@@ -12,7 +12,7 @@ const TheCallForANewReplenishment = ({ tableData, setTableData, handleRowChange,
                         <th>Количество л/с</th>
                         <th>Маршрут следования</th>
                         <th>Сроки движения</th>
-                        <th>Дата приведения к присяге</th>
+                        <th>Дата окончания обучения</th>
                     </tr>
                     </thead>
                     <tbody>

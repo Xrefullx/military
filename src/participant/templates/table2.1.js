@@ -3,14 +3,14 @@ import React from 'react';
 const TrainingTableComponent = ({ tableData, setTableData, handleRowChange, addRow, removeRow,handleSubmit }) => {
     return (
         <div className="table-container">
-            <p style={{ color: 'white' }}>Проведение занятий по огневой подготовке с личным составом:</p>
+            <p style={{ color: 'white' }}>Проведение занятий по профессиональной подготовке с личным составом:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead>
                     <tr>
                         <th>Мероприятие</th>
                         <th>Сроки</th>
-                        <th>Должность, звание, Ф.И.О., мероприятие</th>
+                        <th>Ф.И.О., мероприятие</th>
                         <th>Кол-во л/с</th>
                     </tr>
                     </thead>

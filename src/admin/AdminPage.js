@@ -207,8 +207,9 @@ function AdminPage({ login,setIsAdmin, isAdmin }) {
                                 </Link>
                             </button>
                         </td>
-
-                        <td>Был</td>
+                        <td className={user.has_entry_last_24h === "1" ? 'green-text' : 'red-text'}>
+                            {user.has_entry_last_24h === "1" ? 'Был' : 'Не был'}
+                        </td>
                         <td>
                             <button onClick={() => openModal(user.idnum)}>Задать</button>
                         </td>

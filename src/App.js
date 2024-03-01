@@ -5,6 +5,7 @@ import './App.css';
 import AdminPage from "./admin/AdminPage";
 import LoginAttemptsPage from "./admin/LoginAttemptsPage";
 import ParticipantPage from "./participant/ParticipantPage";
+import HistoryAnswerPage from "./admin/HistoryAnswerPage";
 
 function App() {
   const [login, setLogin] = useState(localStorage.getItem('login') || "");
@@ -66,6 +67,12 @@ function App() {
             <Route path="/participant">
               {!isAdmin ? <ParticipantPage login={login} /> : <Redirect to="/" />}
             </Route>
+            <Route
+                path="/Answerhistory/:id_answer"
+                render={(props) => (
+                    isAdmin ? <HistoryAnswerPage id_answer={props.match.params.id_answer} {...props} /> : <Redirect to="/" />
+                )}
+            />
 
             <Route path="/">
               <div className="login-form">

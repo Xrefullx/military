@@ -44,6 +44,8 @@ import LeadershipTableComponentReed from "../admin/components/templates/table1";
 import axios from "axios";
 import co from "co";
 import WorkingGroupsTableComponentReed from "../admin/components/templates/table4";
+import WorkingGroupsTableComponentReed2 from "./templates/table4_2";
+import LeadershipTableComponentReed2 from "./templates/table4_1";
 
 
 function ParticipantPage({ login, setIsAdmin }) {
@@ -106,10 +108,17 @@ function ParticipantPage({ login, setIsAdmin }) {
 
             // Опционально: обработка ответа, если необходимо
             console.log('Response from server:', response.data);
-
             setShowModalSend(false);
+
+            if (response && response.status === 201) {
+                alert('Отправлено');
+                handleConfirmLogout(); // Perform logout
+            }
+
         } catch (error) {
             console.error('Error sending data to server:', error);
+
+
         }
     };
 
@@ -209,7 +218,7 @@ function ParticipantPage({ login, setIsAdmin }) {
                 )}
             </div>
             <div className="text-center">
-                <label htmlFor="obstanovkaInput" style={{ color: 'white' }}>ОБСТАНОВКА В В/Ч   </label>
+                <label htmlFor="obstanovkaInput" style={{ color: 'white' }}>ОБСТАНОВКА НА ОБЪЕКТЕ №   </label>
                 <input className="input-text"
                        type="text"
                        id="obstanovkaInput"
@@ -230,7 +239,7 @@ function ParticipantPage({ login, setIsAdmin }) {
                 />
             </div>
         <div className="centered-tables"  >
-            <LeadershipTableComponentReed
+            <LeadershipTableComponentReed2
                 login={login}
             />
             <TableComponent
@@ -250,7 +259,7 @@ function ParticipantPage({ login, setIsAdmin }) {
                 removeRow={removeRow2}
                 handleSubmit={handleSubmit}
             />
-            <WorkingGroupsTableComponentReed
+            <WorkingGroupsTableComponentReed2
                 login={login}
             />
             <InternshipsTableComponent

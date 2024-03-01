@@ -3,7 +3,7 @@ import React from "react";
 const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }) => {
     return (
         <div className="table-container">
-            <p style={{ color: 'white' }}>10.	В период поступления абитуриентов, доклад по всем мероприятиям и особенностям данного периода:</p>
+            <p style={{ color: 'white' }}>10.	В период поступления стажирующихся, доклад по всем мероприятиям и особенностям данного периода:</p>
             <form onSubmit={handleSubmit}>
                 <table className="table">
                     <thead className="thead-style">
@@ -14,9 +14,9 @@ const ThePeriodOfAdmissionOfApplicants = ({ formData,handleSubmit,handleChange }
                     </tr>
                     <tr>
                         <td>всего</td>
-                        <td>из числа в/сл</td>
-                        <td>из числа кадетов</td>
-                        <td>из числа гп</td>
+                        <td>Юристы</td>
+                        <td>Инженеры</td>
+                        <td>Строители</td>
                     </tr>
                     </thead>
                     <tbody>

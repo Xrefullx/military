@@ -1,23 +1,53 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
-const InternshipsTableComponent  = () => {
-    const [tableData, setTableData] = useState([]);
+const InternshipsTableComponentReed  = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table5')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/table5/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
     
     return (
         <div className="table-container">
-            <p>4. Военнослужащие воинской части</p>
-            <form onSubmit={handleSubmit}>
+            <p style={{ color: 'white' }}>4. Стажировки (практики) гражданских лиц из числа студентов федеральных государственных
+                образовательных организаций высшего образования:
+            </p>
+            <form>
                 <table className="table">
                     <thead>
                     <tr>
@@ -30,7 +60,7 @@ const InternshipsTableComponent  = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {tableData.map((rowData, index) => (
+                    {user.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
                                 <input
@@ -89,4 +119,4 @@ const InternshipsTableComponent  = () => {
     );
 };
 
-export default InternshipsTableComponent;
+export default InternshipsTableComponentReed;

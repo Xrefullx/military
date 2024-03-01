@@ -2,23 +2,51 @@ import React, {useEffect, useState} from 'react';
 import './templatesCss.css';
 import axios from "axios";
 
-const RotatedTableComponent  = ({ formData,handleSubmit,setFormData }) => {
-    const [tableData, setTableData] = useState([]);
+const RotatedTableComponentReed  = ({ id_answer }) => {
+    const [user, setuser] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table9')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/table9/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setuser(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     return (
         <div className="table-container">
-            <p>9.	Данные о заболеваемости личного состава, в том числе новой короновирусной инфекции:</p>
-            <form onSubmit={handleSubmit}>
+            <p style={{ color: 'white' }}>9.	Данные о заболеваемости личного состава:</p>
+            <form>
         <table className="table">
             <thead className="thead-style">
             <tr>
@@ -29,10 +57,10 @@ const RotatedTableComponent  = ({ formData,handleSubmit,setFormData }) => {
                 <td colSpan="3" >Итого</td>
             </tr>
             <tr>
-                <td colSpan="3" >Солдаты</td>
-                <td colSpan="3" >Военнослужащие</td>
-                <td colSpan="3" >Солдаты</td>
-                <td colSpan="3">Военнослужащие</td>
+                <td colSpan="3" >Мужчины</td>
+                <td colSpan="3" >Женщины</td>
+                <td colSpan="3" >Мужчины</td>
+                <td colSpan="3">Женщины</td>
                 <td colSpan="3"></td>
             </tr>
             <tr>
@@ -57,64 +85,64 @@ const RotatedTableComponent  = ({ formData,handleSubmit,setFormData }) => {
             </tr>
             </thead>
             <tbody>
-            {tableData.map((rowData, index) => (
+            {user.map((rowData, index) => (
                 <tr key={index}>
                 <td className="thead-style">РВСН </td>
                 <td className="input-cell9">
-                    <input type="number" name="dayTotal" value={formData.dayTotal} readOnly/>
+                    <input type="number" name="dayTotal" value={rowData.dayTotal} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="dayORZ" value={formData.dayORZ} readOnly/>
+                    <input type="number" name="dayORZ" value={rowData.dayORZ} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="dayPneumonia" value={formData.dayPneumonia} readOnly/>
-                </td>
-
-                <td className="input-cell9">
-                    <input type="number" name="soldiersHospitalTotal" value={formData.soldiersHospitalTotal} readOnly/>
-                </td>
-                <td className="input-cell9">
-                    <input type="number" name="soldiersHospitalORZ" value={formData.soldiersHospitalORZ} readOnly/>
-                </td>
-                <td className="input-cell9">
-                    <input type="number" name="soldiersHospitalPneumonia" value={formData.soldiersHospitalPneumonia} readOnly/>
+                    <input type="number" name="dayPneumonia" value={rowData.dayPneumonia} readOnly/>
                 </td>
 
                 <td className="input-cell9">
-                    <input type="number" name="cadetsHospitalTotal" value={formData.cadetsHospitalTotal} readOnly/>
+                    <input type="number" name="soldiersHospitalTotal" value={rowData.soldiersHospitalTotal} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="cadetsHospitalORZ" value={formData.cadetsHospitalORZ} readOnly/>
+                    <input type="number" name="soldiersHospitalORZ" value={rowData.soldiersHospitalORZ} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="cadetsHospitalPneumonia" value={formData.cadetsHospitalPneumonia} readOnly/>
+                    <input type="number" name="soldiersHospitalPneumonia" value={rowData.soldiersHospitalPneumonia} readOnly/>
+                </td>
+
+                <td className="input-cell9">
+                    <input type="number" name="cadetsHospitalTotal" value={rowData.cadetsHospitalTotal} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="soldiersStationaryTotal" value={formData.soldiersStationaryTotal} readOnly/>
+                    <input type="number" name="cadetsHospitalORZ" value={rowData.cadetsHospitalORZ} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="soldiersORZ" value={formData.soldiersORZ} readOnly/>
+                    <input type="number" name="cadetsHospitalPneumonia" value={rowData.cadetsHospitalPneumonia} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="soldiersPneumonia" value={formData.soldiersPneumonia} readOnly/>
+                    <input type="number" name="soldiersStationaryTotal" value={rowData.soldiersStationaryTotal} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="cadetsStationaryTotal" value={formData.cadetsStationaryTotal} readOnly/>
+                    <input type="number" name="soldiersORZ" value={rowData.soldiersORZ} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="cadetsORZ" value={formData.cadetsORZ} readOnly/>
+                    <input type="number" name="soldiersPneumonia" value={rowData.soldiersPneumonia} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="cadetsPneumonia" value={formData.cadetsPneumonia} readOnly/>
+                    <input type="number" name="cadetsStationaryTotal" value={rowData.cadetsStationaryTotal} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="totalStationaryTotal" value={formData.totalTotal} readOnly/>
+                    <input type="number" name="cadetsORZ" value={rowData.cadetsORZ} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="totalORZ" value={formData.totalORZ} readOnly/>
+                    <input type="number" name="cadetsPneumonia" value={rowData.cadetsPneumonia} readOnly/>
                 </td>
                 <td className="input-cell9">
-                    <input type="number" name="totalPneumonia" value={formData.totalPneumonia} readOnly/>
+                    <input type="number" name="totalStationaryTotal" value={rowData.totalTotal} readOnly/>
+                </td>
+                <td className="input-cell9">
+                    <input type="number" name="totalORZ" value={rowData.totalORZ} readOnly/>
+                </td>
+                <td className="input-cell9">
+                    <input type="number" name="totalPneumonia" value={rowData.totalPneumonia} readOnly/>
                 </td>
                 </tr>
             ))}
@@ -125,5 +153,5 @@ const RotatedTableComponent  = ({ formData,handleSubmit,setFormData }) => {
     );
 };
 
-export default RotatedTableComponent ;
+export default RotatedTableComponentReed ;
 

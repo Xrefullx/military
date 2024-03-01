@@ -24,10 +24,10 @@ type FormData struct {
 	TotalORZ                                int       `json:"totalORZ"`
 	TotalPneumonia                          int       `json:"totalPneumonia"`
 	RecruitmentPlan                         string    `json:"recruitmentPlan"`
-	InTotal                                 int       `json:"inTotal"`
-	FromAmongTheMilitaryPersonnel           int       `json:"fromAmongTheMilitaryPersonnel"`
-	FromAmongTheCadets                      int       `json:"fromAmongTheCadets"`
-	FromAmongTheGP                          int       `json:"fromAmongTheGP"`
+	InTotal                                 string    `json:"inTotal"`
+	FromAmongTheMilitaryPersonnel           string    `json:"fromAmongTheMilitaryPersonnel"`
+	FromAmongTheCadets                      string    `json:"fromAmongTheCadets"`
+	FromAmongTheGP                          string    `json:"fromAmongTheGP"`
 	Note                                    string    `json:"Note"`
 	D_create                                time.Time `json:"d_create"`
 	EnergyDeviationHeat                     string    `json:"energyDeviationHeat"`
@@ -128,11 +128,11 @@ type AddTask struct {
 	FormData    FormData      `json:"formData"`
 	TableData   []TableData   `json:"tableData"`
 	TableData2  []TableData2  `json:"tableData2"`
-	TableData3  []TableData8  `json:"tableData3"`
-	TableData4  []TableData8  `json:"tableData4"`
-	TableData5  []TableData8  `json:"tableData5"`
-	TableData6  []TableData8  `json:"tableData6"`
-	TableData7  []TableData8  `json:"tableData7"`
+	TableData3  []TableData3  `json:"tableData3"`
+	TableData4  []TableData4  `json:"tableData4"`
+	TableData5  []TableData5  `json:"tableData5"`
+	TableData6  []TableData6  `json:"tableData6"`
+	TableData7  []TableData7  `json:"tableData7"`
 	TableData8  []TableData8  `json:"tableData8"`
 	TableData9  []TableData9  `json:"tableData9"`
 	TableData10 []TableData10 `json:"tableData10"`

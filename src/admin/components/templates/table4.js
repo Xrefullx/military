@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
-const WorkingGroupsTableComponentReed = ({ login }) => {
-    const [user2, setTableData2] = useState([]);
+const WorkingGroupsTableComponentReed = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
 
     const getAuthToken = async () => {
         try {
@@ -27,35 +27,26 @@ const WorkingGroupsTableComponentReed = ({ login }) => {
                     localStorage.setItem('token', token);
                 }
 
-                const requestData = {
-                    login: login
-                };
-
-                if (typeof login === 'object' && login.hasOwnProperty('login')) {
-                    requestData.login = login.login;
-                }
-
-                const response = await axios.post('http://localhost:8080/api/table4', requestData, {
+                const response = await axios.get(`http://localhost:8080/api/table4/${id_answer}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                    }
-                }
-                );
-                console.log(response)
-                setTableData2(response.data.table4); // Обновляем state с данными пользователя
+                    },
+                });
+
+                setTableData(response.data.user);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, [login]);
+    }, []);
 
 
     
     return (
         <div className="table-container">
-            <p style={{ color: 'white' }}>3. Работа групп (комиссий) от вышестоящих органов управления, кооперации промышленности и представителей воинских частей других видов и родов ВС РФ:</p>
+            <p style={{ color: 'white' }}>3. Работа групп (комиссий) от вышестоящих органов управления, кооперации промышленности и представителей других видов контроля:</p>
             <form>
                 <table className="table">
                     <thead>
@@ -67,7 +58,7 @@ const WorkingGroupsTableComponentReed = ({ login }) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {user2.map((rowData, index) => (
+                    {user.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
                                 <input

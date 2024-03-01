@@ -1,22 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ThePeriodOfAdmissionOfApplicants = () => {
-    const [tableData, setTableData] = useState([]);
+const ThePeriodOfAdmissionOfApplicantsReed = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table10')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/table10/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
     
     return (
         <div className="table-container">
-            <p>10.	В период поступления абитуриентов, доклад по всем мероприятиям и особенностям данного периода:</p>
+            <p style={{ color: 'white' }}>10.	В период поступления стажирующихся, доклад по всем мероприятиям и особенностям данного
+                периода:</p>
             <form>
                 <table className="table">
                     <thead className="thead-style">
@@ -27,13 +56,13 @@ const ThePeriodOfAdmissionOfApplicants = () => {
                     </tr>
                     <tr>
                         <td>всего</td>
-                        <td>из числа в/сл</td>
-                        <td>из числа кадетов</td>
-                        <td>из числа гп</td>
+                        <td>Юристы</td>
+                        <td>Инженеры</td>
+                        <td>Строители</td>
                     </tr>
                     </thead>
                     <tbody>
-                    {tableData.map((rowData, index) => (
+                    {user.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
                                 <input
@@ -92,4 +121,4 @@ const ThePeriodOfAdmissionOfApplicants = () => {
     );
 };
 
-export default ThePeriodOfAdmissionOfApplicants;
+export default ThePeriodOfAdmissionOfApplicantsReed;

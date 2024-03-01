@@ -2,31 +2,60 @@ import React, {useEffect, useState} from 'react';
 import './templatesCss.css';
 import axios from "axios";
 
-const InformationAboutOfficials = () => {
-    const [tableData, setTableData] = useState([]);
+const InformationAboutOfficialsReed = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/text8')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/text8/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
 
     return (
         <table>
             <tbody>
-            {tableData.map((rowData, index) => (
+            {user.map((rowData, index) => (
                 <tr key={index}>
-                <td colSpan="8" className="energy-deviation-row">
-                    8.	Данные о должностных лицах, занимающих руководящие должности, находящиеся на излечении в медицинских учреждениях:
+                    <td colSpan="8" className="energy-deviation-row" style={{ color: 'white' }}>
+                    8.	Данные о должностных лицах, занимающих руководящие должности, находящихся на
+                        излечении в медицинских учреждениях:
                     <input
                         type="text"
                         name="InformationAboutOfficials"
-                        value={tableData.InformationAboutOfficials}
+                        value={rowData.informationAboutOfficials}
                         readOnly
                         className="input-field"
                     />
@@ -38,4 +67,4 @@ const InformationAboutOfficials = () => {
     );
 };
 
-export default InformationAboutOfficials;
+export default InformationAboutOfficialsReed;

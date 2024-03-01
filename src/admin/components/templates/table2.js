@@ -2,35 +2,63 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
 
-const TableComponentReed = () => {
-    const [tableData, setTableData] = useState([]);
+const TableComponentReed = ({ id_answer }) => {
+    const [user, setTableData] = useState([]);
+
+    const getAuthToken = async () => {
+        try {
+            const requestData = {
+                apiToken: 'Xrefullx',
+            };
+            const response = await axios.post('http://localhost:8080/api/auth', requestData);
+            return response.data.token;
+        } catch (error) {
+            console.error('Error while fetching auth token:', error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
-        axios.get('/table2')
-            .then(response => {
-                setTableData(response.data);
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-            });
+        const fetchData = async () => {
+            try {
+                let token = localStorage.getItem('token');
+
+                if (!token) {
+                    token = await getAuthToken();
+                    localStorage.setItem('token', token);
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/table2/${id_answer}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                setTableData(response.data.user);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
     
     
     return (
         <div className="table-container">
-            <p>2. Основные мероприятия, запланированные на текущие сутки:</p>
-            <form onSubmit={handleSubmit}>
+            <p style={{ color: 'white' }}>2. Основные мероприятия, запланированные на текущие сутки:</p>
+            <form>
                 <table className="table">
                     <thead>
                     <tr>
                         <th>Мероприятие</th>
                         <th>Сроки</th>
-                        <th>Должность, звание, Ф.И.О., мероприятие</th>
+                        <th>Ф.И.О., мероприятие</th>
                         <th>Кол-во л/с</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {tableData.map((rowData, index) => (
+                    {user.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
                                 <input

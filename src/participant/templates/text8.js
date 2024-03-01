@@ -1,7 +1,7 @@
 import React from 'react';
 import './templatesCss.css';
 
-const InformationAboutOfficials = ({ formData, handleChange }) => {
+const InformationAboutOfficialsReed = ({ formData, handleChange }) => {
     return (
         <table>
             <tbody>
@@ -22,4 +22,4 @@ const InformationAboutOfficials = ({ formData, handleChange }) => {
     );
 };
 
-export default InformationAboutOfficials;
+export default InformationAboutOfficialsReed;

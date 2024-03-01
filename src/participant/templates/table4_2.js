@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 
-const TrainingTableComponentReed = ({ id_answer }) => {
-    const [user, setTableData] = useState([]);
+const WorkingGroupsTableComponentReed2 = ({ login }) => {
+    const [user2, setTableData2] = useState([]);
 
     const getAuthToken = async () => {
         try {
@@ -27,66 +27,77 @@ const TrainingTableComponentReed = ({ id_answer }) => {
                     localStorage.setItem('token', token);
                 }
 
-                const response = await axios.get(`http://localhost:8080/api/table21/${id_answer}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const requestData = {
+                    login: login
+                };
 
-                setTableData(response.data.user);
+                if (typeof login === 'object' && login.hasOwnProperty('login')) {
+                    requestData.login = login.login;
+                }
+
+                const response = await axios.post('http://localhost:8080/api/table4', requestData, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
+                    }
+                );
+                console.log(response)
+                setTableData2(response.data.table4); // Обновляем state с данными пользователя
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, []);
-    
+    }, [login]);
+
+
+
     return (
         <div className="table-container">
-            <p style={{ color: 'white' }}>Проведение занятий по профессиональной подготовке с личным составом: </p>
+            <p style={{ color: 'white' }}>3. Работа групп (комиссий) от вышестоящих органов управления, кооперации промышленности и представителей других видов контроля:</p>
             <form>
                 <table className="table">
                     <thead>
                     <tr>
-                        <th>Мероприятие</th>
-                        <th>Сроки</th>
-                        <th>Ф.И.О., мероприятие</th>
+                        <th>Направление деятельности</th>
+                        <th>Сроки, место</th>
+                        <th>Состав</th>
                         <th>Кол-во л/с</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {user.map((rowData, index) => (
+                    {user2.map((rowData, index) => (
                         <tr key={index}>
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="event2"
-                                    value={rowData.event2}
+                                    name="TheFieldOfActivity"
+                                    value={rowData.TheFieldOfActivity}
                                     readOnly
                                 />
                             </td>
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDates2"
-                                    value={rowData.eventDates2}
+                                    name="datesLocation"
+                                    value={rowData.datesLocation}
                                     readOnly
                                 />
                             </td>
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="eventDetails2"
-                                    value={rowData.eventDetails2}
+                                    name="positionTitle"
+                                    value={rowData.positionTitle}
                                     readOnly
                                 />
                             </td>
                             <td className="input-cell">
                                 <input
                                     type="text"
-                                    name="personnelCount2"
-                                    value={rowData.personnelCount2}
+                                    name="kolVoLS"
+                                    value={rowData.kolVoLS}
                                     readOnly
                                 />
                             </td>
@@ -99,4 +110,4 @@ const TrainingTableComponentReed = ({ id_answer }) => {
     );
 };
 
-export default TrainingTableComponentReed;
+export default WorkingGroupsTableComponentReed2;

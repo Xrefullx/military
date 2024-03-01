@@ -41,7 +41,7 @@ const RotatedTableComponent  = ({ formData,handleSubmit,setFormData }) => {
 
     return (
         <div className="table-container">
-            <p style={{ color: 'white' }}>9.	Данные о заболеваемости личного состава, в том числе новой короновирусной инфекции:</p>
+            <p style={{ color: 'white' }}>9.	Данные о заболеваемости личного состава</p>
             <form onSubmit={handleSubmit}>
         <table className="table">
             <thead className="thead-style">
@@ -53,10 +53,10 @@ const RotatedTableComponent  = ({ formData,handleSubmit,setFormData }) => {
                 <td colSpan="3" >Итого</td>
             </tr>
             <tr>
-                <td colSpan="3" >Солдаты</td>
-                <td colSpan="3" >Военнослужащие</td>
-                <td colSpan="3" >Солдаты</td>
-                <td colSpan="3">Военнослужащие</td>
+                <td colSpan="3" >Мужчины</td>
+                <td colSpan="3" >Женщины</td>
+                <td colSpan="3" >Мужчины</td>
+                <td colSpan="3">Женщины</td>
                 <td colSpan="3"></td>
             </tr>
             <tr>

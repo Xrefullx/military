@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const LeadershipTableComponentReed = ({ id_answer }) => {
+const LeadershipTableComponentReed2 = ({ login }) => {
     const [user, setTableData] = useState([]);
 
     const getAuthToken = async () => {
@@ -27,20 +27,28 @@ const LeadershipTableComponentReed = ({ id_answer }) => {
                     localStorage.setItem('token', token);
                 }
 
-                const response = await axios.get(`http://localhost:8080/api/table1/${id_answer}`, {
+                const requestData = {
+                    login: login
+                };
+
+                if (typeof login === 'object' && login.hasOwnProperty('login')) {
+                    requestData.login = login.login;
+                }
+
+                const response = await axios.post('http://localhost:8080/api/table1', requestData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                    },
+                    }
                 });
 
-                setTableData(response.data.user);
+                setTableData(response.data.user); // Обновляем state с данными пользователя
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [login]);
 
     return (
         <div className="table-container">
@@ -115,4 +123,4 @@ const LeadershipTableComponentReed = ({ id_answer }) => {
     );
 };
 
-export default LeadershipTableComponentReed;
+export default LeadershipTableComponentReed2;
