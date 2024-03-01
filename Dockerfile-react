@@ -3,12 +3,12 @@ FROM node:16
 # Устанавливаем рабочую директорию
 WORKDIR /app
 # Копируем package.json и yarn.lock (если есть) в рабочую директорию
-COPY client/package.json ./
-COPY client/package-lock.json ./
+COPY package.json ./
+COPY package-lock.json ./
 # Устанавливаем зависимости
 RUN npm install --force
 # Копируем исходный код в рабочую директорию
-COPY client/ ./
+COPY . .
 # Собираем приложение
 RUN npm run build
 # Устанавливаем serve глобально
